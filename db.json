@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "kalyan@gmail.com",
+      "password": "kalyan",
+      "name": "Kalyan"
+    }
+  ],
+
+  "tickets": [
+    {
+      "id": 1,
+      "title": "Login issue"
+    }
+  ],
+
+  "comments": []
+}
