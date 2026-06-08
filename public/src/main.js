@@ -1,27 +1,15 @@
 //import { login } from "./api/auth.js";
 import { initAuth }
 from "./modules/auth.js";
-import { logout } from "./api/auth.js";
+import { logout, isAuthenticated } from "./api/auth.js";
 import { initTicketsList } from "./modules/tickets.js";
-import {
-    isAuthenticated
-} from "./api/auth.js";
-
 const page =
     document.body.dataset.page;
 
 if (page === "login") {
 
-    if (isAuthenticated()) {
+    initAuth();
 
-        window.location.href =
-            "dashboard.html";
-
-    } else {
-
-        initAuth();
-
-    }
 }
 
 if (page === "dashboard") {

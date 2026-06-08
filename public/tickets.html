@@ -19,6 +19,38 @@
     <div id="error"></div>
 
     <div id="empty-state"></div>
+<div class="toolbar">
+
+    <input
+        type="text"
+        id="search-input"
+        placeholder="Search tickets..."
+    >
+
+    <select id="status-filter">
+        <option value="">All Statuses</option>
+        <option value="open">Open</option>
+        <option value="in-progress">In Progress</option>
+        <option value="resolved">Resolved</option>
+        <option value="closed">Closed</option>
+    </select>
+
+    <select id="priority-filter">
+        <option value="">All Priorities</option>
+        <option value="urgent">Urgent</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+    </select>
+
+    <select id="sort-filter" aria-label="Sort by date">
+        <option value="">sort</option>
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+    </select>
+
+</div>    
+
 
     <table id="tickets-table">
 
@@ -30,7 +62,9 @@
                 <th>Priority</th>
                 <th>Status</th>
                 <th>Assignee</th>
-                <th>Created</th>
+                <th id="created-sort">
+    Created <span id="sort-arrow">↓</span>
+</th>
             </tr>
         </thead>
 
@@ -39,6 +73,21 @@
         </tbody>
 
     </table>
+    <div id="pagination">
+
+    <button id="prev-btn">
+        Previous
+    </button>
+
+    <span id="page-info">
+        Page 1
+    </span>
+
+    <button id="next-btn">
+        Next
+    </button>
+
+</div>
 
     <script type="module" src="./src/main.js"></script>
 

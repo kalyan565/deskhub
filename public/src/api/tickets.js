@@ -5,6 +5,18 @@ import {
     del
 } from "./client.js";
 
+export function filterTicketsByStatus(
+    status
+) {
+
+    return get(
+        `/tickets?status=${status}`
+    );
+
+}
+
+
+
 export function listTickets() {
     return get("/tickets");
 }
@@ -46,4 +58,47 @@ export function addComment(
         "/comments",
         comment
     );
+}
+
+export function searchTickets(
+    searchTerm
+) {
+
+    return get(
+        `/tickets?q=${searchTerm}`
+    );
+
+}
+
+export function filterTicketsByPriority(
+    priority
+) {
+
+    return get(
+        `/tickets?priority=${priority}`
+    );
+
+}
+
+//sort
+export function sortTickets(
+    order
+) {
+
+    return get(
+        `/tickets?_sort=createdAt&_order=${order}`
+    );
+
+}
+
+//pagination
+export function getTicketsPage(
+    page,
+    limit = 10
+) {
+
+    return get(
+        `/tickets?_page=${page}&_limit=${limit}`
+    );
+
 }

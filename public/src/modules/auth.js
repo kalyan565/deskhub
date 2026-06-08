@@ -1,4 +1,9 @@
-import { login } from "../api/auth.js";
+import {
+    login,
+    getCurrentUser,
+    isAuthenticated,
+    logout
+} from "../api/auth.js";
 
 export function initAuth() {
 
@@ -11,6 +16,41 @@ export function initAuth() {
         document.getElementById(
             "error-message"
         );
+
+    if (isAuthenticated()) {
+
+        const user =
+            getCurrentUser();
+
+        const label =
+            user?.email ||
+            user?.name ||
+            "your account";
+
+        form.hidden = true;
+
+        errorMessage.innerHTML =
+            `You are already signed in (${label}). ` +
+            `<a href="dashboard.html">Open dashboard</a> · ` +
+            `<button type="button" id="login-sign-out">Sign out</button>`;
+
+        document
+            .getElementById(
+                "login-sign-out"
+            )
+            .addEventListener(
+                "click",
+                () => {
+
+                    logout();
+
+                    window.location.reload();
+
+                }
+            );
+
+        return;
+    }
 
     form.addEventListener(
         "submit",
