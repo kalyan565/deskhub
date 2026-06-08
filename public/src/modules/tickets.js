@@ -1,14 +1,21 @@
-import {listTickets,searchTickets,filterTicketsByStatus,filterTicketsByPriority,sortTickets,getTicketsPage} from "../api/tickets.js";
+import {listTickets,
+    searchTickets,
+    filterTicketsByStatus,
+    filterTicketsByPriority,
+    getTicketsPage,
+    sortBy} from "../api/tickets.js";
 import {get} from "../api/client.js";
 import { formatDate }from "../utils/formatDate.js";
 import { debounce } from "../utils/debounce.js";
 
 
 
-let sortOrder = "desc";
+
 let users = [];
 let currentPage = 1;
 const PAGE_SIZE = 10;
+let sortField = "";
+let sortOrder = "asc";
 
 function renderTable(tickets) {
     const tbody =
@@ -57,6 +64,28 @@ async function loadPage(page) {
         `Page ${page}`;
 }
 
+async function applySort(field) {
+
+    if (sortField === field) {
+
+        sortOrder =
+            sortOrder === "asc"
+            ? "desc"
+            : "asc";
+    } else {
+        sortField = field;
+        sortOrder = "asc";
+    }
+    currentPage = 1;
+    const tickets =
+        await sortBy(
+            field,
+            sortOrder
+        );
+
+    renderTable(tickets);
+}
+
 export async function initTicketsList() {
     const loading = document.getElementById("loading");
     const error =
@@ -101,50 +130,49 @@ const nextBtn =
             await loadPage(
                 currentPage
             );
-
         }
-
     }
 );
 
-const createdSort =
+//sort
+const sortId =
     document.getElementById(
-        "created-sort"
+        "sort-id"
     );
 
-const sortArrow =
+const sortPriority =
     document.getElementById(
-        "sort-arrow"
+        "sort-priority"
     );
 
-createdSort.addEventListener(
+const sortStatus =
+    document.getElementById(
+        "sort-status"
+    );
+
+const sortCreated =
+    document.getElementById(
+        "sort-created"
+    );
+
+sortId.addEventListener(
     "click",
-    async () => {
+    () => applySort("id")
+);
 
-        if (sortOrder === "desc") {
+sortPriority.addEventListener(
+    "click",
+    () => applySort("priority")
+);
 
-            sortOrder = "asc";
+sortStatus.addEventListener(
+    "click",
+    () => applySort("status")
+);
 
-            sortArrow.textContent =
-                "↑";
-
-        } else {
-
-            sortOrder = "desc";
-
-            sortArrow.textContent =
-                "↓";
-
-        }
-
-        const results =
-            await sortTickets(
-                sortOrder
-            );
-
-        renderTable(results);
-
-    }
+sortCreated.addEventListener(
+    "click",
+    () => applySort("createdAt")
 );
 
 nextBtn.addEventListener(
@@ -160,7 +188,7 @@ nextBtn.addEventListener(
     }
 );
 
-    const statusFilter =
+const statusFilter =
     document.getElementById(
         "status-filter"
     );
@@ -168,71 +196,19 @@ nextBtn.addEventListener(
 statusFilter.addEventListener(
     "change",
     async (event) => {
-
         const status =
             event.target.value;
-
         let results;
-
         if (status === "") {
-
             results =
                 await listTickets();
-
         } else {
-
             results =
                 await filterTicketsByStatus(
                     status
                 );
-
         }
-
         renderTable(results);
-
-    }
-);
-
-//sort filter 
-const sortFilter =
-    document.getElementById(
-        "sort-filter"
-    );
-
-sortFilter.addEventListener(
-    "change",
-    async (event) => {
-
-        const sort =
-            event.target.value;
-
-        let results;
-
-        if (sort === "") {
-
-            results =
-                await listTickets();
-
-        } else if (
-            sort === "newest"
-        ) {
-
-            results =
-                await sortTickets(
-                    "desc"
-                );
-
-        } else {
-
-            results =
-                await sortTickets(
-                    "asc"
-                );
-
-        }
-
-        renderTable(results);
-
     }
 );
 
@@ -244,28 +220,19 @@ const priorityFilter =
 priorityFilter.addEventListener(
     "change",
     async (event) => {
-
         const priority =
             event.target.value;
-
         let results;
-
         if (priority === "") {
-
             results =
                 await listTickets();
-
         } else {
-
             results =
                 await filterTicketsByPriority(
                     priority
                 );
-
         }
-
         renderTable(results);
-
     }
 );
 

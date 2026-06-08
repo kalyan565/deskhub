@@ -7,6 +7,21 @@
     height: 100vh;
 }
 
+#sort-id,
+#sort-priority,
+#sort-status,
+#sort-created {
+    cursor: pointer;
+    user-select: none;
+}
+
+#sort-id:hover,
+#sort-priority:hover,
+#sort-status:hover,
+#sort-created:hover {
+    background-color: #ececec;
+}
+
 .login-container {
     background: white;
     padding: 30px;

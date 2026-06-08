@@ -43,11 +43,7 @@
         <option value="low">Low</option>
     </select>
 
-    <select id="sort-filter" aria-label="Sort by date">
-        <option value="">sort</option>
-        <option value="newest">Newest first</option>
-        <option value="oldest">Oldest first</option>
-    </select>
+   
 
 </div>    
 
@@ -56,14 +52,26 @@
 
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Customer</th>
-                <th>Priority</th>
-                <th>Status</th>
-                <th>Assignee</th>
-                <th id="created-sort">
-    Created <span id="sort-arrow">↓</span>
+                <th id="sort-id">
+    ID <span id="id-arrow">↕</span>
+</th>
+
+<th>Title</th>
+
+<th>Customer</th>
+
+<th id="sort-priority">
+    Priority <span id="priority-arrow">↕</span>
+</th>
+
+<th id="sort-status">
+    Status <span id="status-arrow">↕</span>
+</th>
+
+<th>Assignee</th>
+
+<th id="sort-created">
+    Created <span id="created-arrow">↕</span>
 </th>
             </tr>
         </thead>

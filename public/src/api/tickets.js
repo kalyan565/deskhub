@@ -80,16 +80,7 @@ export function filterTicketsByPriority(
 
 }
 
-//sort
-export function sortTickets(
-    order
-) {
 
-    return get(
-        `/tickets?_sort=createdAt&_order=${order}`
-    );
-
-}
 
 //pagination
 export function getTicketsPage(
@@ -99,6 +90,18 @@ export function getTicketsPage(
 
     return get(
         `/tickets?_page=${page}&_limit=${limit}`
+    );
+
+}
+
+//sort
+export function sortBy(
+    field,
+    order
+) {
+
+    return get(
+        `/tickets?_sort=${field}&_order=${order}`
     );
 
 }
