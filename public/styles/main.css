@@ -1,12 +1,8 @@
- body {
+body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    padding: 20px;
 }
-
 #sort-id,
 #sort-priority,
 #sort-status,
@@ -28,11 +24,18 @@
     width: 320px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+} 
+
+.error {
+    color: red;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
 }
 
 h2 {
     text-align: center;
-    color: #0cfff7;
+    color: #522503;
     margin-bottom: 20px;
 }
 

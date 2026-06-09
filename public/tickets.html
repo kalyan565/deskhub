@@ -19,6 +19,11 @@
     <div id="error"></div>
 
     <div id="empty-state"></div>
+
+    <button id="new-ticket-btn">
+    New Ticket
+</button>
+
 <div class="toolbar">
 
     <input
@@ -94,6 +99,52 @@
     <button id="next-btn">
         Next
     </button>
+
+</div>
+
+<div
+    id="ticket-modal"
+    style="display:none;"
+>
+
+    <h2>
+        Create Ticket
+    </h2>
+
+    <form id="ticket-form">
+
+        <input
+            type="text"
+            id="title"
+            placeholder="Title"
+        >
+        <span id="title-error" class="error"></span>
+
+        <input
+            type="text"
+            id="customer-name"
+            placeholder="Customer Name"
+        >
+        <span id="customer-name-error" class="error"></span>
+
+        <input
+            type="email"
+            id="customer-email"
+            placeholder="Customer Email"
+        >
+        <span id="customer-email-error" class="error"></span>
+
+        <textarea
+            id="description"
+            placeholder="Description"
+        ></textarea>
+        <span id="description-error" class="error"></span>
+
+        <button type="submit">
+            Create
+        </button>
+
+    </form>
 
 </div>
 

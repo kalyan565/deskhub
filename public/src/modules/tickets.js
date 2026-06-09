@@ -3,7 +3,7 @@ import {listTickets,
     filterTicketsByStatus,
     filterTicketsByPriority,
     getTicketsPage,
-    sortBy} from "../api/tickets.js";
+    sortBy,createTicket} from "../api/tickets.js";
 import {get} from "../api/client.js";
 import { formatDate }from "../utils/formatDate.js";
 import { debounce } from "../utils/debounce.js";
@@ -29,9 +29,11 @@ function renderTable(tickets) {
     );
         return `<tr>
             <td>${ticket.id}</td>
-            <td class="ticket-title">
-            ${ticket.title}
-            </td>
+            <td>
+    <a href="ticket-detail.html?id=${ticket.id}">
+        ${ticket.title}
+    </a>
+</td>
             <td>${ticket.customerName}</td>
             <td>${ticket.priority}</td>
             <td>${ticket.status}</td>
@@ -58,32 +60,135 @@ async function loadPage(page) {
 
     renderTable(tickets);
 
-    document.getElementById(
-        "page-info"
-    ).textContent =
-        `Page ${page}`;
+    const pageInfo =
+        document.getElementById(
+            "page-info"
+        );
+
+    if (pageInfo) {
+
+        pageInfo.textContent =
+            `Page ${page}`;
+    }
 }
 
-async function applySort(field) {
+async function applySort(
+    field
+) {
 
-    if (sortField === field) {
+    if (
+        sortField === field
+    ) {
 
         sortOrder =
             sortOrder === "asc"
             ? "desc"
             : "asc";
+
     } else {
+
         sortField = field;
         sortOrder = "asc";
+
     }
     currentPage = 1;
-    const tickets =
-        await sortBy(
-            field,
-            sortOrder
-        );
+const tickets =
+    await sortBy(
+        field,
+        sortOrder,
+        currentPage,
+        PAGE_SIZE
+    );
 
-    renderTable(tickets);
+renderTable(tickets);
+
+const pageInfoSort =
+    document.getElementById(
+        "page-info"
+    );
+
+if (pageInfoSort) {
+
+    pageInfoSort.textContent =
+        `Page ${currentPage}`;
+}
+}
+
+function validateForm(
+    title,
+    customerName,
+    customerEmail,
+    description
+) {
+
+    let valid = true;
+
+    document.getElementById(
+        "title-error"
+    ).textContent = "";
+
+    document.getElementById(
+        "customer-name-error"
+    ).textContent = "";
+
+    document.getElementById(
+        "customer-email-error"
+    ).textContent = "";
+
+    document.getElementById(
+        "description-error"
+    ).textContent = "";
+
+    if (
+        title.trim().length < 5
+    ) {
+
+        document.getElementById(
+            "title-error"
+        ).textContent =
+            "Title must be at least 5 characters";
+
+        valid = false;
+    }
+
+    if (
+        customerName.trim() === ""
+    ) {
+
+        document.getElementById(
+            "customer-name-error"
+        ).textContent =
+            "Customer name is required";
+
+        valid = false;
+    }
+
+    if (
+        !customerEmail.includes("@")
+    ) {
+
+        document.getElementById(
+            "customer-email-error"
+        ).textContent =
+            "Enter a valid email";
+
+        valid = false;
+    }
+
+    if (
+        description.trim().length < 10
+    ) {
+
+        document.getElementById(
+            "description-error"
+        ).textContent =
+            "Description must be at least 10 characters";
+
+        valid = false;
+    }
+
+    return valid;
+
 }
 
 export async function initTicketsList() {
@@ -108,154 +213,345 @@ if (tickets.length === 0) {
 }
 
 await loadPage(currentPage);
-    const searchInput =document.getElementById("search-input");
-    const prevBtn =
-    document.getElementById(
-        "prev-btn"
-    );
-
-const nextBtn =
-    document.getElementById(
-        "next-btn"
-    );
-
-    prevBtn.addEventListener(
-    "click",
-    async () => {
-
-        if (currentPage > 1) {
-
-            currentPage--;
-
-            await loadPage(
-                currentPage
-            );
-        }
-    }
-);
-
-//sort
-const sortId =
-    document.getElementById(
-        "sort-id"
-    );
-
-const sortPriority =
-    document.getElementById(
-        "sort-priority"
-    );
-
-const sortStatus =
-    document.getElementById(
-        "sort-status"
-    );
-
-const sortCreated =
-    document.getElementById(
-        "sort-created"
-    );
-
-sortId.addEventListener(
-    "click",
-    () => applySort("id")
-);
-
-sortPriority.addEventListener(
-    "click",
-    () => applySort("priority")
-);
-
-sortStatus.addEventListener(
-    "click",
-    () => applySort("status")
-);
-
-sortCreated.addEventListener(
-    "click",
-    () => applySort("createdAt")
-);
-
-nextBtn.addEventListener(
-    "click",
-    async () => {
-
-        currentPage++;
-
-        await loadPage(
-            currentPage
+    const searchInput =
+        document.getElementById(
+            "search-input"
         );
 
-    }
-);
+    const prevBtn =
+        document.getElementById(
+            "prev-btn"
+        );
 
-const statusFilter =
-    document.getElementById(
-        "status-filter"
-    );
+    const nextBtn =
+        document.getElementById(
+            "next-btn"
+        );
 
-statusFilter.addEventListener(
-    "change",
-    async (event) => {
-        const status =
-            event.target.value;
-        let results;
-        if (status === "") {
-            results =
-                await listTickets();
-        } else {
-            results =
-                await filterTicketsByStatus(
-                    status
-                );
-        }
-        renderTable(results);
-    }
-);
+    if (prevBtn) {
 
-const priorityFilter =
-    document.getElementById(
-        "priority-filter"
-    );
+        prevBtn.addEventListener(
+            "click",
+            async () => {
 
-priorityFilter.addEventListener(
-    "change",
-    async (event) => {
-        const priority =
-            event.target.value;
-        let results;
-        if (priority === "") {
-            results =
-                await listTickets();
-        } else {
-            results =
-                await filterTicketsByPriority(
-                    priority
-                );
-        }
-        renderTable(results);
-    }
-);
+                if (currentPage > 1) {
 
-const handleSearch =    
-    debounce(
-        async (value) => {
-            let results;
-            if (value === "") {
-                results =await listTickets();
-            } else {
-                results =await searchTickets(value);
+                    currentPage--;
+
+                    if (sortField) {
+
+                        const tickets =
+                            await sortBy(
+                                sortField,
+                                sortOrder,
+                                currentPage,
+                                PAGE_SIZE
+                            );
+
+                        renderTable(tickets);
+
+                    } else {
+
+                        await loadPage(
+                            currentPage
+                        );
+
+                    }
+
+                }
+
             }
-            renderTable(results);
-        },
-        300
+        );
+    }
+
+    const newTicketBtn =
+        document.getElementById(
+            "new-ticket-btn"
+        );
+
+    const ticketForm =
+    document.getElementById(
+        "ticket-form"
     );
 
-    searchInput.addEventListener(
-    "input",
-    (event) => {
-        handleSearch(event.target.value.trim());
+    const modal =
+        document.getElementById(
+            "ticket-modal"
+        );
+
+    if (
+        newTicketBtn &&
+        modal
+    ) {
+
+        newTicketBtn.addEventListener(
+            "click",
+            () => {
+
+                modal.style.display =
+                    "block";
+
+            }
+        );
+    }
+
+    function bindSortHeader(
+        id,
+        field
+    ) {
+
+        const el =
+            document.getElementById(
+                id
+            );
+
+        if (!el) {
+            return;
+        }
+
+        el.style.cursor =
+            "pointer";
+
+        el.addEventListener(
+            "click",
+            () =>
+                applySort(field)
+        );
+    }
+
+    bindSortHeader(
+        "sort-id",
+        "id"
+    );
+
+    bindSortHeader(
+        "sort-priority",
+        "priority"
+    );
+
+    bindSortHeader(
+        "sort-status",
+        "status"
+    );
+
+    bindSortHeader(
+        "sort-created",
+        "createdAt"
+    );
+
+    if (nextBtn) {
+
+        nextBtn.addEventListener(
+            "click",
+            async () => {
+
+                currentPage++;
+
+                if (sortField) {
+
+                    const tickets =
+                        await sortBy(
+                            sortField,
+                            sortOrder,
+                            currentPage,
+                            PAGE_SIZE
+                        );
+
+                    renderTable(tickets);
+
+                } else {
+
+                    await loadPage(
+                        currentPage
+                    );
+
+                }
+
+            }
+        );
+    }
+
+    const statusFilter =
+        document.getElementById(
+            "status-filter"
+        );
+
+    if (statusFilter) {
+
+        statusFilter.addEventListener(
+            "change",
+            async (event) => {
+
+                const status =
+                    event.target.value;
+
+                let results;
+
+                currentPage = 1;
+
+                if (status === "") {
+
+                    await loadPage(
+                        currentPage
+                    );
+
+                    return;
+
+                }
+
+                results =
+                    await filterTicketsByStatus(
+                        status
+                    );
+
+                renderTable(results);
+
+                const pageInfoEl =
+                    document.getElementById(
+                        "page-info"
+                    );
+
+                if (pageInfoEl) {
+
+                    pageInfoEl.textContent =
+                        "Page 1";
+                }
+
+            }
+        );
+    }
+
+    const priorityFilter =
+        document.getElementById(
+            "priority-filter"
+        );
+
+    if (priorityFilter) {
+
+        priorityFilter.addEventListener(
+            "change",
+            async (event) => {
+                const priority =
+                    event.target.value;
+                let results;
+                if (priority === "") {
+                    await loadPage(currentPage);
+                    return;
+                } else {
+                    results =
+                        await filterTicketsByPriority(
+                            priority
+                        );
+                }
+                renderTable(results);
+            }
+        );
+    }
+
+    const handleSearch =
+        debounce(
+            async (value) => {
+                let results;
+                if (value === "") {
+                    currentPage = 1;
+
+                    await loadPage(
+                        currentPage
+                    );
+
+                    return;
+                } else {
+                    results = await searchTickets(value);
+                }
+                renderTable(results);
+            },
+            300
+        );
+
+ticketForm.addEventListener(
+    "submit",
+    async (event) => {
+
+        event.preventDefault();
+
+        const title =
+            document.getElementById(
+                "title"
+            ).value;
+
+        const customerName =
+            document.getElementById(
+                "customer-name"
+            ).value;
+
+        const customerEmail =
+            document.getElementById(
+                "customer-email"
+            ).value;
+
+        const description =
+            document.getElementById(
+                "description"
+            ).value;
+
+        if (
+    !validateForm(
+        title,
+        customerName,
+        customerEmail,
+        description
+    )
+) {
+
+    return;
+
+}
+
+        const newTicket = {
+
+            title,
+            customerName,
+            customerEmail,
+            description,
+
+            status: "open",
+            priority: "medium",
+
+            createdAt:
+                new Date()
+                .toISOString(),
+
+            updatedAt:
+                new Date()
+                .toISOString()
+
+        };
+
+        await createTicket(
+            newTicket
+        );
+
+        modal.style.display =
+            "none";
+
+        alert(
+            "Ticket created successfully"
+        );
+
+        await loadPage(1);
+
     }
 );
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            (event) => {
+                handleSearch(event.target.value.trim());
+            }
+        );
+    }
     } catch(err) {
         error.textContent =
             "Failed to load tickets: " +

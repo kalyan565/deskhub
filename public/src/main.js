@@ -3,6 +3,11 @@ import { initAuth }
 from "./modules/auth.js";
 import { logout, isAuthenticated } from "./api/auth.js";
 import { initTicketsList } from "./modules/tickets.js";
+import {
+    initTicketDetail
+}
+from "./modules/ticketDetails.js";
+
 const page =
     document.body.dataset.page;
 
@@ -46,6 +51,16 @@ if (page === "tickets-list") {
     }
 
 }
+
+if (
+    page === "ticket-detail"
+) {
+
+    initTicketDetail();
+
+}
+
+
 // async function test() {
 //     try {
 //         const user = await login(

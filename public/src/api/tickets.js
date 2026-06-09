@@ -97,11 +97,13 @@ export function getTicketsPage(
 //sort
 export function sortBy(
     field,
-    order
+    order,
+    page,
+    limit
 ) {
 
     return get(
-        `/tickets?_sort=${field}&_order=${order}`
+        `/tickets?_sort=${field}&_order=${order}&_page=${page}&_limit=${limit}`
     );
 
 }
