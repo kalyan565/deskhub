@@ -42,20 +42,20 @@
       "title": "Subscription renewal failed for January",
       "description": "Card was charged but plan still shows expired. Have screenshot of charge.",
       "status": "open",
-      "priority": "high",
+      "priority": "urgent",
       "category": "billing",
       "customerName": "Sneha Iyer",
       "customerEmail": "sneha.iyer@outlook.com",
-      "assignedTo": 4,
+      "assignedTo": 2,
       "createdAt": "2026-05-06T15:42:00Z",
-      "updatedAt": "2026-05-06T15:42:00Z"
+      "updatedAt": "2026-06-09T08:57:43.179Z"
     },
     {
       "id": 3,
       "title": "Dashboard graph not loading on Safari",
       "description": "Works on Chrome and Firefox. Safari shows blank chart area, no console errors.",
-      "status": "in-progress",
-      "priority": "medium",
+      "status": "resolved",
+      "priority": "high",
       "category": "bug",
       "customerName": "Vikram Reddy",
       "customerEmail": "vikram@xyz.co.in",
@@ -424,6 +424,31 @@
       "createdAt": "2026-06-08T10:30:42.131Z",
       "updatedAt": "2026-06-08T10:30:42.134Z",
       "id": 31
+    },
+    {
+      "title": "EXAMPLE TICKET",
+      "customerName": "abcd2",
+      "customerEmail": "abd@gamil.com",
+      "description": "abadfjlajiew",
+      "status": "open",
+      "priority": "medium",
+      "category": "auth",
+      "createdAt": "2026-06-09T09:30:29.790Z",
+      "updatedAt": "2026-06-09T09:30:45.827Z",
+      "id": 32,
+      "assignedTo": null
+    },
+    {
+      "title": "example problem",
+      "customerName": "sssss",
+      "customerEmail": "sss@gmail.com",
+      "description": "hflasjpofewflnc",
+      "status": "open",
+      "priority": "medium",
+      "category": "billing",
+      "createdAt": "2026-06-10T04:15:47.324Z",
+      "updatedAt": "2026-06-10T04:15:47.324Z",
+      "id": 33
     }
   ],
   "comments": [
@@ -559,6 +584,32 @@
       "authorId": 3,
       "content": "Profiled the page — N+1 query problem on the new comments-count column. Optimisation patch in QA.",
       "createdAt": "2026-05-07T08:20:00Z"
+    },
+    {
+      "ticketId": 2,
+      "body": "hdlsajdlksajd",
+      "createdAt": "2026-06-09T07:37:42.355Z",
+      "id": 21
+    },
+    {
+      "ticketId": 2,
+      "body": "hi",
+      "createdAt": "2026-06-09T07:37:50.494Z",
+      "id": 22
+    },
+    {
+      "ticketId": 2,
+      "authorId": 1,
+      "content": "hello",
+      "createdAt": "2026-06-09T08:49:48.974Z",
+      "id": 23
+    },
+    {
+      "ticketId": 3,
+      "authorId": 1,
+      "content": "hi",
+      "createdAt": "2026-06-09T08:51:30.195Z",
+      "id": 24
     }
   ]
 }

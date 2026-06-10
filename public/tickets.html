@@ -20,64 +20,65 @@
 
     <div id="empty-state"></div>
 
-    <button id="new-ticket-btn">
-    New Ticket
-</button>
-
-<div class="toolbar">
-
-    <input
-        type="text"
-        id="search-input"
-        placeholder="Search tickets..."
+    <button
+        type="button"
+        id="new-ticket-btn"
+        title="New ticket (Alt+N). Ctrl+N is reserved by the browser for a new window."
     >
+        New Ticket
+    </button>
 
-    <select id="status-filter">
-        <option value="">All Statuses</option>
-        <option value="open">Open</option>
-        <option value="in-progress">In Progress</option>
-        <option value="resolved">Resolved</option>
-        <option value="closed">Closed</option>
-    </select>
+    <div class="toolbar">
 
-    <select id="priority-filter">
-        <option value="">All Priorities</option>
-        <option value="urgent">Urgent</option>
-        <option value="high">High</option>
-        <option value="medium">Medium</option>
-        <option value="low">Low</option>
-    </select>
+        <input
+            type="text"
+            id="search-input"
+            placeholder="Press / to search tickets"
+        >
 
-   
+        <select id="status-filter">
+            <option value="">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="in-progress">In Progress</option>
+            <option value="resolved">Resolved</option>
+            <option value="closed">Closed</option>
+        </select>
 
-</div>    
+        <select id="priority-filter">
+            <option value="">All Priorities</option>
+            <option value="urgent">Urgent</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+        </select>
 
+    </div>
 
     <table id="tickets-table">
 
         <thead>
             <tr>
                 <th id="sort-id">
-    ID <span id="id-arrow">↕</span>
-</th>
+                    ID <span id="id-arrow">↕</span>
+                </th>
 
-<th>Title</th>
+                <th>Title</th>
 
-<th>Customer</th>
+                <th>Customer</th>
 
-<th id="sort-priority">
-    Priority <span id="priority-arrow">↕</span>
-</th>
+                <th id="sort-priority">
+                    Priority <span id="priority-arrow">↕</span>
+                </th>
 
-<th id="sort-status">
-    Status <span id="status-arrow">↕</span>
-</th>
+                <th id="sort-status">
+                    Status <span id="status-arrow">↕</span>
+                </th>
 
-<th>Assignee</th>
+                <th>Assignee</th>
 
-<th id="sort-created">
-    Created <span id="created-arrow">↕</span>
-</th>
+                <th id="sort-created">
+                    Created <span id="created-arrow">↕</span>
+                </th>
             </tr>
         </thead>
 
@@ -86,67 +87,102 @@
         </tbody>
 
     </table>
+
     <div id="pagination">
 
-    <button id="prev-btn">
-        Previous
-    </button>
-
-    <span id="page-info">
-        Page 1
-    </span>
-
-    <button id="next-btn">
-        Next
-    </button>
-
-</div>
-
-<div
-    id="ticket-modal"
-    style="display:none;"
->
-
-    <h2>
-        Create Ticket
-    </h2>
-
-    <form id="ticket-form">
-
-        <input
-            type="text"
-            id="title"
-            placeholder="Title"
-        >
-        <span id="title-error" class="error"></span>
-
-        <input
-            type="text"
-            id="customer-name"
-            placeholder="Customer Name"
-        >
-        <span id="customer-name-error" class="error"></span>
-
-        <input
-            type="email"
-            id="customer-email"
-            placeholder="Customer Email"
-        >
-        <span id="customer-email-error" class="error"></span>
-
-        <textarea
-            id="description"
-            placeholder="Description"
-        ></textarea>
-        <span id="description-error" class="error"></span>
-
-        <button type="submit">
-            Create
+        <button type="button" id="prev-btn">
+            Previous
         </button>
 
-    </form>
+        <span id="page-info">
+            Page 1
+        </span>
 
-</div>
+        <button type="button" id="next-btn">
+            Next
+        </button>
+
+    </div>
+
+    <div
+        id="ticket-modal"
+        style="display:none;"
+    >
+
+        <div class="modal-content">
+
+            <h2>Create Ticket</h2>
+
+            <form id="ticket-form" novalidate>
+
+                <input
+                    type="text"
+                    id="title"
+                    placeholder="Title"
+                    maxlength="100"
+                >
+                <span id="title-error" class="error"></span>
+
+                <input
+                    type="text"
+                    id="customer-name"
+                    placeholder="Customer Name"
+                >
+                <span id="customer-name-error" class="error"></span>
+
+                <input
+                    type="email"
+                    id="customer-email"
+                    placeholder="Customer Email"
+                >
+                <span id="customer-email-error" class="error"></span>
+
+                <textarea
+                    id="description"
+                    placeholder="Description"
+                    rows="4"
+                ></textarea>
+                <span id="description-error" class="error"></span>
+
+                <select id="ticket-priority">
+                    <option value="">Priority</option>
+                    <option value="urgent">Urgent</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+                <span id="priority-error" class="error"></span>
+
+                <select id="ticket-category">
+                    <option value="">Category</option>
+                    <option value="auth">Auth</option>
+                    <option value="billing">Billing</option>
+                    <option value="bug">Bug</option>
+                    <option value="feature">Feature</option>
+                </select>
+                <span id="category-error" class="error"></span>
+
+                <button type="button" id="ticket-cancel-btn">
+                    Cancel
+                </button>
+
+                <button type="submit" id="ticket-submit" disabled>
+                    Create
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div
+        id="global-loader"
+        class="loader-hidden"
+        aria-live="polite"
+    >
+        <div class="loader-spinner"></div>
+    </div>
 
     <script type="module" src="./src/main.js"></script>
 
